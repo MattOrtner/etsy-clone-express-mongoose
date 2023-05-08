@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-// const config = require("config");
+
 const db = process.env.CONNECTION_STRING;
 
 const connectDB = async () => {
