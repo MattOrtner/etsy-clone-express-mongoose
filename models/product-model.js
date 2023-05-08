@@ -13,7 +13,7 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  is_in_stock: {
+  quantity: {
     type: Number,
     min: 1,
     required: true,
