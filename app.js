@@ -14,10 +14,10 @@ const port = process.env.PORT || 8082;
 app.use(cors());
 
 // use routes
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: false }));
 
 // parse application/json
-app.use(bodyParser.json());
 app.use("/api/products", products);
 
 app.listen(port, () => console.log(`Server running on port ${port}`));

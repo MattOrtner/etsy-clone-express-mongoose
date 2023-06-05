@@ -31,10 +31,12 @@ router.post("/", (req, res) => {
     price: req.body.price,
     description: req.body.description,
     quantity: req.body.quantity,
-    is_in_other_carts: req.body.is_in_other_carts,
-    highlights: req.body.highlights,
     dimensions: req.body.dimensions,
-    labels: req.body.labels,
+    renewal_option: req.body.renewal_option,
+    product_type: req.body.product_type,
+    about_details: req.body.about_details,
+    images: req.body.images,
+    store_id: 123456789,
   });
   product
     .save()

@@ -25,7 +25,7 @@ const ProductSchema = new mongoose.Schema({
     type: [String],
   },
   dimensions: {
-    type: [String],
+    type: [{ length: String, width: String, height: String }],
     required: true,
   },
   labels: {
@@ -33,7 +33,21 @@ const ProductSchema = new mongoose.Schema({
   },
   store_id: {
     type: String,
+    required: String,
   },
+  images: {
+    type: [String],
+    required: true,
+  },
+  renewal_option: {
+    type: String,
+    required: true,
+  },
+  product_type: {
+    type: String,
+    required: true,
+  },
+  about_details: [{ who: String, what: String, when: String }],
 });
 
 module.exports = Product = mongoose.model("product", ProductSchema);
