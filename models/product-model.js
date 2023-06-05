@@ -31,6 +31,9 @@ const ProductSchema = new mongoose.Schema({
   labels: {
     type: [String],
   },
+  store_id: {
+    type: String,
+  },
 });
 
 module.exports = Product = mongoose.model("product", ProductSchema);

@@ -10,9 +10,9 @@ const products = require("./routes/api/products");
 
 connectDB();
 const port = process.env.PORT || 8082;
-// app.use("products", products);
 
 app.use(cors());
+
 // use routes
 app.use(bodyParser.urlencoded({ extended: false }));
 
