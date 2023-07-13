@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const Product = require("../../models/product-model");
+const { Product } = require("../../models/product-model");
 
 // @route GET api/products
 // @description Get all products
@@ -36,7 +36,7 @@ router.post("/", (req, res) => {
     product_type: req.body.product_type,
     about_details: req.body.about_details,
     images: req.body.images,
-    store_id: 123456789,
+    store_id: req.body.store_id,
   });
   product
     .save()

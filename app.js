@@ -7,17 +7,19 @@ const app = express();
 
 // routes
 const products = require("./routes/api/products");
+const users = require("./routes/api/users");
 
 connectDB();
 const port = process.env.PORT || 8082;
 
 app.use(cors());
 
-// use routes
+// parse application/json
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: false }));
 
-// parse application/json
+// use routes
 app.use("/api/products", products);
+app.use("/api/users", users);
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
