@@ -47,7 +47,9 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  about_details: [{ who: String, what: String, when: String }],
+  about_details: { who: String, what: String, when: String },
 });
 
-module.exports = Product = mongoose.model("product", ProductSchema);
+const Product = mongoose.model("product", ProductSchema);
+
+module.exports = { Product, ProductSchema };
