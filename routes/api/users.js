@@ -12,17 +12,18 @@ router.get("/:id", (req, res) => {
 });
 
 // @route POST api/users
-// @description add/save user
+// @description Create user
 router.post("/sign-up", (req, res) => {
+  // check if email exists!!!!!!
   const user = new User({
-    username: req.body.username,
+    name: req.body.name,
     email: req.body.email,
     password: req.body.password,
-    is_signed_in: true,
-    favorite_products: [],
-    shopping_cart: [],
+    isSignedIn: false,
+    favoriteProducts: [],
+    shoppingCart: [],
     store: {
-      store_name: "",
+      storeName: "",
       products: [],
     },
   });
@@ -30,12 +31,55 @@ router.post("/sign-up", (req, res) => {
     .save()
     .then((savedUser) => res.send(savedUser))
     .catch((err) => {
-      res.status(400).json({ error: "Unable to add this product" });
+      res.status(400).json({ error: "Unable to add account" });
     });
 });
 
-// @route PUT api/products/:id
-// @description Update product
+// @route POST api/users
+// @description Sign-In user
+router.post("/sign-in", (req, res) => {
+  const update = { isSignedIn: true };
+  User.findOneAndUpdate({ email: req.body.email }, update, {
+    returnDocument: "after",
+  })
+    .then((user) =>
+      res.send({
+        name: user.name,
+        email: user.email,
+        isSignedIn: user.isSignedIn,
+        favoriteProducts: user.favoriteProducts,
+        shoppingCart: user.shoppingCart,
+        store: {
+          storeName: user.store.storeName,
+          products: user.store.products,
+        },
+      })
+    )
+    .catch((err) => {
+      console.error("err", err);
+      res.status(400).json({ error: "Unable to login" });
+    });
+});
+
+// @route PUT api/users
+// @description Sign-Out user
+router.put("/sign-out", (req, res) => {
+  User.findByIdAndUpdate(req.params.id, req.body, {
+    returnDocument: "after",
+  })
+    .then((user) =>
+      res.json({
+        msg: "Logged out successful",
+      })
+    )
+    .catch((err) => {
+      console.error(err);
+      res.status(400).json({ error: "Unable to logout" });
+    });
+});
+
+// @route PUT api/users/:id
+// @description Update user
 router.put("/:id", (req, res) => {
   User.findByIdAndUpdate(req.params.id, req.body, {
     returnDocument: "after",

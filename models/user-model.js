@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { ProductSchema } = require("./product-model");
 
 const UserSchema = new mongoose.Schema({
-  username: {
+  name: {
     type: String,
     required: true,
   },
@@ -16,11 +16,11 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Please add a Password"],
     minlength: [3, "Password should have at least six(6) characters"],
   },
-  is_signed_in: Boolean,
-  favorite_products: {
+  isSignedIn: Boolean,
+  favoriteProducts: {
     type: [String],
   },
-  shopping_cart: {
+  shoppingCart: {
     type: [String],
   },
   store: {
