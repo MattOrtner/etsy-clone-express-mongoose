@@ -38,11 +38,14 @@ router.post("/sign-up", (req, res) => {
 // @route POST api/users
 // @description Sign-In user
 router.post("/sign-in", (req, res) => {
-  const update = { isSignedIn: true };
-  User.findOneAndUpdate({ email: req.body.email }, update, {
-    returnDocument: "after",
-  })
-    .then((user) =>
+  User.findOneAndUpdate(
+    { email: req.body.email },
+    { isSignedIn: true },
+    {
+      returnDocument: "after",
+    }
+  )
+    .then((user) => {
       res.send({
         name: user.name,
         email: user.email,
@@ -53,10 +56,11 @@ router.post("/sign-in", (req, res) => {
           storeName: user.store.storeName,
           products: user.store.products,
         },
-      })
-    )
+      });
+    })
     .catch((err) => {
       console.error("err", err);
+      console.error("err.config.data", err.config.data);
       res.status(400).json({ error: "Unable to login" });
     });
 });
@@ -64,9 +68,7 @@ router.post("/sign-in", (req, res) => {
 // @route PUT api/users
 // @description Sign-Out user
 router.put("/sign-out", (req, res) => {
-  User.findByIdAndUpdate(req.params.id, req.body, {
-    returnDocument: "after",
-  })
+  User.findOneAndUpdate(req.body.email, { isSignedIn: false })
     .then((user) =>
       res.json({
         msg: "Logged out successful",
