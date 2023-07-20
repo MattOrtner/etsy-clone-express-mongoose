@@ -72,22 +72,31 @@ router.post("/sign-in", async (req, res) => {
         isUser.password,
         function (err, result) {
           if (result) {
-            res.send({
-              name: isUser.name,
-              email: isUser.email,
-              isSignedIn: isUser.isSignedIn,
-              favoriteProducts: isUser.favoriteProducts,
-              shoppingCart: isUser.shoppingCart,
-              store: {
-                storeName: isUser.store.storeName,
-                products: isUser.store.products,
-              },
-            });
+            User.findOneAndUpdate(
+              { email: req.body.email },
+              { isSignedIn: true },
+              { new: true }
+            ).then((user) =>
+              res.send({
+                name: user.name,
+                email: user.email,
+                isSignedIn: user.isSignedIn,
+                favoriteProducts: user.favoriteProducts,
+                shoppingCart: user.shoppingCart,
+                store: {
+                  storeName: user.store.storeName,
+                  products: user.store.products,
+                },
+              })
+            );
           } else {
-            res.json({ body: "user does not exist" });
+            console.error(err, "err");
+            res.json({ noMatch: "pass doesn't match" });
           }
         }
       );
+    } else {
+      res.json({ noMatch: "no matching email" });
     }
   } catch (error) {
     console.error("err", err);
@@ -99,7 +108,7 @@ router.post("/sign-in", async (req, res) => {
 // @route PUT api/users
 // @description Sign-Out user
 router.put("/sign-out", (req, res) => {
-  User.findOneAndUpdate(req.body.email, { isSignedIn: false })
+  User.findOneAndUpdate({ email: req.body.email }, { isSignedIn: false })
     .then((user) =>
       res.json({
         msg: "Logged out successful",
