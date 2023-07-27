@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const { Product } = require("../../models/product-model");
+const User = require("../../models/user-model");
 
 // @route GET api/products
 // @description Get all products
@@ -25,25 +26,54 @@ router.get("/:id", (req, res) => {
 
 // @route POST api/products
 // @description add/save product
-router.post("/", (req, res) => {
-  const product = new Product({
-    product_name: req.body.product_name,
-    price: req.body.price,
-    description: req.body.description,
-    quantity: req.body.quantity,
-    dimensions: req.body.dimensions,
-    renewal_option: req.body.renewal_option,
-    product_type: req.body.product_type,
-    about_details: req.body.about_details,
-    images: req.body.images,
-    seller_id: req.body.seller_id,
-  });
-  product
-    .save()
-    .then((savedProduct) => res.send(savedProduct))
-    .catch((err) => {
-      res.status(400).json({ error: "Unable to add this product" });
+router.post("/", async (req, res) => {
+  try {
+    const {
+      product_name,
+      price,
+      description,
+      quantity,
+      dimensions,
+      renewal_option,
+      product_type,
+      about_details,
+      images,
+      seller_id,
+    } = req.body;
+
+    // Create the new product
+    const newProduct = await Product.create({
+      product_name,
+      price,
+      description,
+      quantity,
+      dimensions,
+      renewal_option,
+      product_type,
+      about_details,
+      images,
+      seller_id,
     });
+
+    // Find the user by ID
+    const user = await User.findById(seller_id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update the user's inventory by pushing the new product ID
+    user.inventory.push(newProduct._id);
+
+    // Save the updated user
+    await user.save();
+
+    // Return the new product to the client
+    return res.status(201).json(newProduct);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server Error" });
+  }
 });
 
 // @route PUT api/products/:id
