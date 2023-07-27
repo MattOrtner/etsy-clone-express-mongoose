@@ -23,7 +23,7 @@ router.get("/:id", (req, res) => {
     );
 });
 
-// @route GET api/products
+// @route POST api/products
 // @description add/save product
 router.post("/", (req, res) => {
   const product = new Product({
@@ -36,7 +36,7 @@ router.post("/", (req, res) => {
     product_type: req.body.product_type,
     about_details: req.body.about_details,
     images: req.body.images,
-    store_id: req.body.store_id,
+    seller_id: req.body.seller_id,
   });
   product
     .save()

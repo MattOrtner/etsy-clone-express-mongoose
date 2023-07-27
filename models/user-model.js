@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { ProductSchema } = require("./product-model");
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -23,12 +22,8 @@ const UserSchema = new mongoose.Schema({
   shoppingCart: {
     type: [String],
   },
-  store: {
-    type: {
-      store_name: String,
-      products: [ProductSchema],
-    },
-  },
+  storeName: String,
+  inventory: [String],
 });
 
 module.exports = User = mongoose.model("user", UserSchema);
