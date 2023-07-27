@@ -71,6 +71,9 @@ router.post("/sign-in", async (req, res) => {
                   isSignedIn: user.isSignedIn,
                   favoriteProducts: user.favoriteProducts,
                   shoppingCart: user.shoppingCart,
+                  storeName: user.store_name,
+                  inventory: user.inventory,
+                  full_inventory: [],
                 })
               // console.log("user", user)
             );
