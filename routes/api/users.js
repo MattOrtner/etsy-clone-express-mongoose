@@ -28,26 +28,12 @@ router.post("/sign-up", async (req, res) => {
           isSignedIn: true,
           favoriteProducts: [],
           shoppingCart: [],
-          store: {
-            storeName: "",
-            products: [],
-          },
+          storeName: "Auto-Generated Fake Store Name",
+          inventory: [],
         });
         user
           .save()
-          .then((savedUser) =>
-            res.send({
-              name: savedUser.name,
-              email: savedUser.email,
-              isSignedIn: savedUser.isSignedIn,
-              favoriteProducts: savedUser.favoriteProducts,
-              shoppingCart: savedUser.shoppingCart,
-              store: {
-                storeName: "",
-                products: savedUser.store.products,
-              },
-            })
-          )
+          .then((savedUser) => res.send(savedUser))
           .catch((err) => {
             res.status(400).json({
               error: "Unable to add account, please try again shortly.",
@@ -76,18 +62,17 @@ router.post("/sign-in", async (req, res) => {
               { email: req.body.email },
               { isSignedIn: true },
               { new: true }
-            ).then((user) =>
-              res.send({
-                name: user.name,
-                email: user.email,
-                isSignedIn: user.isSignedIn,
-                favoriteProducts: user.favoriteProducts,
-                shoppingCart: user.shoppingCart,
-                store: {
-                  storeName: user.store.storeName,
-                  products: user.store.products,
-                },
-              })
+            ).then(
+              (user) =>
+                res.send({
+                  id: user._id,
+                  name: user.name,
+                  email: user.email,
+                  isSignedIn: user.isSignedIn,
+                  favoriteProducts: user.favoriteProducts,
+                  shoppingCart: user.shoppingCart,
+                })
+              // console.log("user", user)
             );
           } else {
             console.error(err, "err");

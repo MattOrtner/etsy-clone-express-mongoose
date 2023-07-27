@@ -21,19 +21,13 @@ const ProductSchema = new mongoose.Schema({
   is_in_other_carts: {
     type: Boolean,
   },
-  highlights: {
-    type: [String],
-  },
   dimensions: {
     type: [{ length: String, width: String, height: String }],
     required: true,
   },
-  labels: {
-    type: [String],
-  },
-  store_id: {
+  seller_id: {
     type: String,
-    required: String,
+    required: true,
   },
   images: {
     type: [String],
@@ -48,6 +42,8 @@ const ProductSchema = new mongoose.Schema({
     required: true,
   },
   about_details: { who: String, what: String, when: String },
+  labels: [String],
+  highlights: [String],
 });
 
 const Product = mongoose.model("product", ProductSchema);
