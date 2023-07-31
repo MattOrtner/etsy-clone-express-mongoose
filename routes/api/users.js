@@ -3,13 +3,14 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 
 const User = require("../../models/user-model");
+const { Product } = require("../../models/product-model");
 
 // @route GET api/users/:id
 // @description Get single product by id
 router.get("/:id", (req, res) => {
   User.findById(req.params.id)
     .then((user) => res.json(user))
-    .catch((err) => res.status(404).json({ noproductfound: "No User found" }));
+    .catch((err) => res.status(404).json({ noUserFound: "No User found" }));
 });
 
 // @route POST api/users
@@ -28,7 +29,7 @@ router.post("/sign-up", async (req, res) => {
           isSignedIn: true,
           favoriteProducts: [],
           shoppingCart: [],
-          storeName: "Auto-Generated Fake Store Name",
+          storeName: "Fake Shop Name",
           inventory: [],
         });
         user
@@ -48,7 +49,7 @@ router.post("/sign-up", async (req, res) => {
 });
 
 // @route POST api/users
-// @description Sign-In user
+// @description Sign-In use
 router.post("/sign-in", async (req, res) => {
   const isUser = await User.findOne({ email: req.body.email });
   try {
@@ -71,9 +72,9 @@ router.post("/sign-in", async (req, res) => {
                   isSignedIn: user.isSignedIn,
                   favoriteProducts: user.favoriteProducts,
                   shoppingCart: user.shoppingCart,
-                  storeName: user.store_name,
+                  storeName: user.storeName,
                   inventory: user.inventory,
-                  full_inventory: [],
+                  fullInventory: [],
                 })
               // console.log("user", user)
             );
@@ -132,6 +133,30 @@ router.delete("/:id", (req, res) => {
   User.findByIdAndDelete(req.params.id, req.body)
     .then((user) => res.json({ mgs: "User entry deleted successfully" }))
     .catch((err) => res.status(404).json({ error: "No such a product" }));
+});
+
+// @route GET api/users/:id/inventory
+router.get("/:id/inventory", async (req, res) => {
+  try {
+    const userId = req.params.id;
+    // Find user
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.json({ msg: "User not found" });
+    }
+    // Find inventory of the user
+    const inventory = await Product.find()
+      .where("_id")
+      .in(user.inventory)
+      .exec();
+
+    if (inventory.length) {
+      return res.json(inventory);
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server Error" });
+  }
 });
 
 module.exports = router;
