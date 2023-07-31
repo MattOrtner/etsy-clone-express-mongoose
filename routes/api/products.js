@@ -41,7 +41,6 @@ router.post("/", async (req, res) => {
       seller_id,
     } = req.body;
 
-    // Create the new product
     const newProduct = await Product.create({
       product_name,
       price,
@@ -55,20 +54,16 @@ router.post("/", async (req, res) => {
       seller_id,
     });
 
-    // Find the user by ID
     const user = await User.findById(seller_id);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Update the user's inventory by pushing the new product ID
     user.inventory.push(newProduct._id);
 
-    // Save the updated user
     await user.save();
 
-    // Return the new product to the client
     return res.status(201).json(newProduct);
   } catch (err) {
     console.error(err);
